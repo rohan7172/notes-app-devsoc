@@ -99,9 +99,29 @@ export default function Home() {
   // UI 
 
   return (
-    <main>
-      <h1>Notes App</h1>
+    <main 
+        className="
+        min-h-screen
+        bg-gray-100
+        dark:bg-gray-900
+        transition-colors
+        duration-300
+    ">
+      <div className="
+        max-w-2xl
+        mx-auto
+        p-8
+        ">
+      <h1 className="text-4xl font-bold mb-8">Notes App</h1>
 
+      <div className="
+        bg-white
+        dark:bg-gray-800
+        rounded-xl
+        shadow-md
+        p-6
+        mb-8
+        ">
       <NoteForm
         title={title}
         content={content}
@@ -110,7 +130,7 @@ export default function Home() {
         onSubmit={handleSubmit}
         isEditing={editingNote !== null}
       />
-
+        </div>
       {notes.map((note) => (
         <NoteCard
           key={note.id}
@@ -119,6 +139,7 @@ export default function Home() {
           onDelete={handleDelete}
         />
       ))}
+      </div>
     </main>
   );
 }
