@@ -1,23 +1,23 @@
-import { title } from "process";
-import { TextareaHTMLAttributes } from "react";
+import { Children, SelectHTMLAttributes } from "react";
 
-type TextareaProps =
-  TextareaHTMLAttributes<HTMLTextAreaElement>;
+type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
 
-export default function Textarea({
+export default function Input({
   className = "",
+  children,
   ...props
-}: TextareaProps) {
+}: SelectProps) {
   return (
-    <textarea
+    <select
       className={`
-        w-full
+        min-w:180px
         rounded-lg
         border
         border-gray-300
         bg-white
         px-3
         py-2
+        text-sm
         outline-none
         transition
         focus:border-blue-500
@@ -27,8 +27,9 @@ export default function Textarea({
         dark:bg-zinc-800
         ${className}
       `}
-      placeholder={title}
       {...props}
-    />
+    >
+        {children}
+    </select>
   );
 }

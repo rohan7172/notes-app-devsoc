@@ -9,6 +9,7 @@ import type { Note } from "@/types/note";
 import NotesList from "./components/notes/NotesList";
 import NotesToolbar from "./components/notes/NotesToolbar";
 import SearchInput from "./components/notes/SearchInput";
+import Sort from "./components/notes/SortSelect";
 
 export default function Home() {
   // State
@@ -17,6 +18,10 @@ export default function Home() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [sortBy, setSortBy] = useState<
+  "newest" | "oldest" | "title-asc" | "title-desc"
+>("newest");
 
   // Load notes
   useEffect(() => {
@@ -142,7 +147,14 @@ export default function Home() {
               onChange={setSearchQuery}
           />
 
+          <Sort
+            value={sortBy}
+            onChange={setSortBy}
+          />
+
       </NotesToolbar>
+
+      <h2 className="">Write a Note :</h2>
 
       <NoteForm
         title={title}

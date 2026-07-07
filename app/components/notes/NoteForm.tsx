@@ -24,6 +24,7 @@ export default function NoteForm({
     <form onSubmit={onSubmit} className="mb-6">
       <Input
         value={title}
+        placeholder="Title"
         onChange={(e) => setTitle(e.target.value)}
       />
 
@@ -31,6 +32,7 @@ export default function NoteForm({
 
       <Textarea
         value={content}
+        placeholder="Content"
         onChange={(e) => setContent(e.target.value)}
         />
 
