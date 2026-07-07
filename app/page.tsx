@@ -151,7 +151,15 @@ export default function Home() {
         mx-auto
         p-8
         ">
-      <h1 className="text-4xl font-bold mb-8">Notes App</h1>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+          📝 Notes App
+        </h1>
+
+        <p className="mt-2 text-gray-600 dark:text-gray-400">
+          Capture your ideas, reminders and thoughts in one place.
+        </p>
+      </div>
 
       <div className="
         bg-white
@@ -175,9 +183,14 @@ export default function Home() {
           />
 
       </NotesToolbar>
+      <div className="mt-15"></div>
 
-      <h2 className="">Write a Note :</h2>
 
+      <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+        {editingNote ? "Edit Note" : "Create a New Note"}
+      </h2>
+
+      
       <NoteForm
         title={title}
         content={content}
@@ -187,6 +200,11 @@ export default function Home() {
         isEditing={editingNote !== null}
       />
         </div>
+
+
+      <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
+        Your Notes
+      </h2>
 
       <NotesList
         notes={sortedAndFilteredNotes}
