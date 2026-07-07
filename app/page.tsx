@@ -11,6 +11,47 @@ import NotesToolbar from "./components/notes/NotesToolbar";
 import SearchInput from "./components/notes/SearchInput";
 import SortSelect from "./components/notes/SortSelect";
 
+
+import { Canvas } from "@react-three/fiber";
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import type { Mesh } from "three";
+
+// A simple animated "notebook" made of two stacked boxes (cover + pages)
+function Notebook() {
+  const groupRef = useRef<Mesh>(null);
+
+  // Runs on every animation frame — this is how you animate things in three.js
+  useFrame((state) => {
+    if (groupRef.current) {
+      // slow spin
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.6;
+      // gentle floating up and down
+      groupRef.current.position.y = Math.sin(state.clock.getElapsedTime()) * 0.2;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {/* Notebook cover */}
+      <mesh>
+        <boxGeometry args={[2, 2.6, 0.15]} />
+        <meshStandardMaterial color="#4f46e5" />
+      </mesh>
+
+      {/* Pages, slightly in front of the cover */}
+      <mesh position={[0, 0, 0.1]}>
+        <boxGeometry args={[1.85, 2.45, 0.08]} />
+        <meshStandardMaterial color="#f9fafb" />
+      </mesh>
+    </group>
+  );
+}
+
+
+
+
+
 export default function Home() {
   // State
   const [title, setTitle] = useState("");
@@ -146,6 +187,8 @@ export default function Home() {
         transition-colors
         duration-300
     ">
+
+
       <div className="
         max-w-2xl
         mx-auto
@@ -160,6 +203,19 @@ export default function Home() {
           Capture your ideas, reminders and thoughts in one place.
         </p>
       </div>
+
+
+      <section className="h-300px w-full">
+        <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[3, 3, 3]} intensity={1} />
+          <Notebook />
+        </Canvas>
+      </section>
+
+
+
+      
 
       <div className="
         bg-white
