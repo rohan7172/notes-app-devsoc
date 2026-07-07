@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 
-import NoteCard from "./components/NoteCard";
-import NoteForm from "./components/NoteForm";
+import NoteCard from "./components/notes/NoteCard";
+import NoteForm from "./components/notes/NoteForm";
 
 import type { Note } from "@/types/note";
+import NotesList from "./components/notes/NotesList";
+import NotesToolbar from "./components/notes/NotesToolbar";
+import SearchInput from "./components/notes/SearchInput";
 
 export default function Home() {
   // State
@@ -13,6 +16,7 @@ export default function Home() {
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Load notes
   useEffect(() => {
@@ -94,6 +98,14 @@ export default function Home() {
     setTitle("");
     setContent("");
   }
+  const filteredNotes = notes.filter((note) => {
+  const query = searchQuery.toLowerCase();
+
+  return (
+    note.title.toLowerCase().includes(query) ||
+    note.content.toLowerCase().includes(query)
+  );
+  });
 
   //______________________________________
   // UI 
@@ -122,6 +134,16 @@ export default function Home() {
         p-6
         mb-8
         ">
+      
+      <NotesToolbar>
+
+          <SearchInput
+              value={searchQuery}
+              onChange={setSearchQuery}
+          />
+
+      </NotesToolbar>
+
       <NoteForm
         title={title}
         content={content}
@@ -131,14 +153,13 @@ export default function Home() {
         isEditing={editingNote !== null}
       />
         </div>
-      {notes.map((note) => (
-        <NoteCard
-          key={note.id}
-          note={note}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      ))}
+
+      <NotesList
+        notes={filteredNotes}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+      
       </div>
     </main>
   );

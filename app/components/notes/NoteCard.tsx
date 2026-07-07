@@ -1,4 +1,5 @@
 import type { Note } from "@/types/note";
+import Card from "../ui/Card"
 
 type NoteCardProps = {
   note: Note;
@@ -12,6 +13,7 @@ export default function NoteCard({
   onDelete,
 }: NoteCardProps) {
   return (
+    <Card>
     <div 
         className="
             bg-white
@@ -49,5 +51,6 @@ export default function NoteCard({
         Delete
       </button>
     </div>
+    </Card>
   );
 }
