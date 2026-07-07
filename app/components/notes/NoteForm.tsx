@@ -42,6 +42,7 @@ export default function NoteForm({
             {isEditing ? "Update Note" : "Create Note"}
             Save Note
         </Button>
+      
     </form>
   );
 }

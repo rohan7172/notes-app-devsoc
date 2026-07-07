@@ -9,7 +9,7 @@ import type { Note } from "@/types/note";
 import NotesList from "./components/notes/NotesList";
 import NotesToolbar from "./components/notes/NotesToolbar";
 import SearchInput from "./components/notes/SearchInput";
-import Sort from "./components/notes/SortSelect";
+import SortSelect from "./components/notes/SortSelect";
 
 export default function Home() {
   // State
@@ -103,14 +103,42 @@ export default function Home() {
     setTitle("");
     setContent("");
   }
-  const filteredNotes = notes.filter((note) => {
-  const query = searchQuery.toLowerCase();
 
-  return (
-    note.title.toLowerCase().includes(query) ||
-    note.content.toLowerCase().includes(query)
-  );
+  // SORTING, SEARCHING
+  const filteredNotes = notes.filter((note) => {
+    const query = searchQuery.toLowerCase();
+
+    return (
+      note.title.toLowerCase().includes(query) ||
+      note.content.toLowerCase().includes(query)
+    );
   });
+  
+  const sortedNotes = notes.sort((a,b) => {
+    switch(sortBy){
+    case "newest": 
+      return(a.id-b.id)
+      
+    case "oldest":
+      return(b.id-a.id)
+      
+    case "title-asc":
+      return(a.title.localeCompare(b.title))
+
+    case "title-desc":
+      return(b.title.localeCompare(a.title))
+    
+  }}
+  )
+  
+  //const sortedNotes =filteredNotes.sort((a,b) => {
+  //  const 
+  //  return (
+  //    
+  //  );
+  //});
+
+
 
   //______________________________________
   // UI 
@@ -147,7 +175,7 @@ export default function Home() {
               onChange={setSearchQuery}
           />
 
-          <Sort
+          <SortSelect
             value={sortBy}
             onChange={setSortBy}
           />
