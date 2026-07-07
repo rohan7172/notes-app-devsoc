@@ -1,26 +1,37 @@
 import { getAllNotes, createNote } from "@/lib/notes";
 import { NextResponse } from "next/server";
 
+import { successResponse, errorResponse } from "@/lib/api-response";
+
+import { validateNoteInput } from "@/lib/validation";
+
 // Handles GET /api/notes
 export async function GET() {
-  return NextResponse.json(getAllNotes());
+  return successResponse(getAllNotes());
 }
 
 // Handles POST /api/notes
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const { title, content } = body;
 
   // Basic validation
-  if (!title || !content) {
-    return NextResponse.json(
-      { error: "Title and content are required." },
-      { status: 400 }
-    );
-  }
+  const { title, content } = body;
 
+    const validation = validateNoteInput(
+    title,
+    content
+    );
+
+    if (!validation.success) {
+        return errorResponse(
+            validation.error,
+            400
+        );
+    }
+
+  
   const note = createNote(title, content);
 
-  return NextResponse.json(note, { status: 201 });
+  return successResponse(note, 201 );
 }

@@ -27,9 +27,9 @@ export default function Home() {
   useEffect(() => {
     async function fetchNotes() {
       const response = await fetch("/api/notes");
-      const data = await response.json();
+      const result = await response.json();
 
-      setNotes(data);
+      setNotes(result.data);
     }
 
     fetchNotes();
@@ -113,31 +113,25 @@ export default function Home() {
       note.content.toLowerCase().includes(query)
     );
   });
-  
-  const sortedNotes = notes.sort((a,b) => {
-    switch(sortBy){
-    case "newest": 
-      return(a.id-b.id)
-      
-    case "oldest":
-      return(b.id-a.id)
-      
-    case "title-asc":
-      return(a.title.localeCompare(b.title))
 
-    case "title-desc":
-      return(b.title.localeCompare(a.title))
-    
-  }}
-  )
-  
-  //const sortedNotes =filteredNotes.sort((a,b) => {
-  //  const 
-  //  return (
-  //    
-  //  );
-  //});
+  const sortedAndFilteredNotes = [...filteredNotes].sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return b.id - a.id;
 
+      case "oldest":
+        return a.id - b.id;
+
+      case "title-asc":
+        return a.title.localeCompare(b.title);
+
+      case "title-desc":
+        return b.title.localeCompare(a.title);
+
+      default:
+        return 0;
+    }
+  });
 
 
   //______________________________________
@@ -195,7 +189,7 @@ export default function Home() {
         </div>
 
       <NotesList
-        notes={filteredNotes}
+        notes={sortedAndFilteredNotes}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />

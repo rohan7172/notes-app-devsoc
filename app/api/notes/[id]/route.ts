@@ -4,13 +4,21 @@ import {
   deleteNote,
 } from "@/lib/notes";
 
-import { NextResponse } from "next/server";
+import {
+  successResponse,
+  errorResponse
+} from "@/lib/api-response";
+
+import { ValidationError } from "next/dist/compiled/amphtml-validator";
+import { validateNoteInput } from "@/lib/validation";
+
 
 interface RouteContext {
   params: Promise<{
     id: string;
   }>;
 }
+
 
 // GET /api/notes/:id
 export async function GET(
@@ -22,14 +30,15 @@ export async function GET(
   const note = getNoteById(Number(id));
 
   if (!note) {
-    return NextResponse.json(
-      { error: "Note not found." },
-      { status: 404 }
+    return errorResponse(
+      "Note not found.",
+      404
     );
   }
 
-  return NextResponse.json(note);
+  return successResponse(note);
 }
+
 
 // PUT /api/notes/:id
 export async function PUT(
@@ -42,12 +51,19 @@ export async function PUT(
 
   const { title, content } = body;
 
-  if (!title || !content) {
-    return NextResponse.json(
-      { error: "Title and content are required." },
-      { status: 400 }
+  const validation = validateNoteInput(
+    title,
+    content
     );
-  }
+
+    if (!validation.success) {
+    return errorResponse(
+        validation.error,
+        400
+    );
+    }
+  
+
 
   const updatedNote = updateNote(
     Number(id),
@@ -55,15 +71,18 @@ export async function PUT(
     content
   );
 
+
   if (!updatedNote) {
-    return NextResponse.json(
-      { error: "Note not found." },
-      { status: 404 }
+    return errorResponse(
+      "Note not found.",
+      404
     );
   }
 
-  return NextResponse.json(updatedNote);
+
+  return successResponse(updatedNote);
 }
+
 
 // DELETE /api/notes/:id
 export async function DELETE(
@@ -74,14 +93,16 @@ export async function DELETE(
 
   const deleted = deleteNote(Number(id));
 
+
   if (!deleted) {
-    return NextResponse.json(
-      { error: "Note not found." },
-      { status: 404 }
+    return errorResponse(
+      "Note not found.",
+      404
     );
   }
 
-  return NextResponse.json({
-    message: "Note deleted successfully.",
+
+  return successResponse({
+    message: "Note deleted successfully."
   });
 }

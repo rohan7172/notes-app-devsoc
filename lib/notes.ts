@@ -17,6 +17,7 @@ export function createNote(title: string, content: string): Note {
     id: nextId++,
     title,
     content,
+    createdAt: new Date().toISOString()
   };
 
   notes.push(newNote);
